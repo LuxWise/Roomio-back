@@ -1,33 +1,50 @@
 package com.HotelService.controller;
 
+import com.HotelService.model.Hotel.Hotel;
+import com.HotelService.model.Hotel.Room;
+import com.HotelService.service.HotelService;
+import com.HotelService.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.MessagingException;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.function.ThrowingSupplier;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/api/hotels")
 @RequiredArgsConstructor
 public class HotelController {
 
+    private final HotelService hotelService;
+    private final RoomService roomService;
+
     @GetMapping()
     public ResponseEntity<Object[]> getAllHotels() {
-        return "List of all hotels";
+        List<Hotel> hotels = hotelService.getAllHotels();
+        return ResponseEntity.ok(hotels.toArray());
+    }
+
+    @GetMapping("/{hotelId}")
+    public ResponseEntity<Hotel> getHotelById(@PathVariable UUID hotelId) {
+        Hotel hotel = hotelService.getHotelById(hotelId);
+        return ResponseEntity.ok(hotel);
     }
 
     @GetMapping("/rooms")
     public ResponseEntity<Object[]> getAllRooms() {
-        return "List of all hotels";
+        List<Room> rooms = roomService.getAllRooms();
+        return ResponseEntity.ok(rooms.toArray());
     }
 
-    @GetMapping("/rooms/{hotelId}")
-    public ResponseEntity<Object[]> getRoomDetails() {
-        return "List of all hotels";
+    @GetMapping("/rooms/{roomId}")
+    public ResponseEntity<Room> getRoomById(@PathVariable UUID roomId) {
+        Room room = roomService.getHotelById(roomId);
+        return ResponseEntity.ok(room);
     }
 
     @PostMapping()
@@ -37,7 +54,7 @@ public class HotelController {
         });
     }
 
-    @PostMapping("/rooms/{hotelId}")
+    @PostMapping("/rooms")
     public ResponseEntity<HotelResponse> createRooms() {
         return  handleRequestProcess(() -> {
             return HotelResponse.builder().message("Hotel created successfully").build();
