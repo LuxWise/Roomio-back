@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+
+  # ======== API GATEWAY ========
+  api-gateway:
+    build: ./ApiGateway
+    ports:
+      - "8080:8080"
+    environment:
+      RABBITMQ_URI: amqp://rabbitmq:5672
+      JWT_SECRET: "586E3272357538782F413F4428472B4B6250655368566B597033733676397924"
+    networks:
+      - main-network
+    depends_on:
+      - rabbitmq
+      - user-service
+
+    # ========== USER SERVICE ==========
+  user-db:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: user_admin
+      POSTGRES_PASSWORD: user_db_pass
+      POSTGRES_DB: user_service
+    volumes:
+      - user-data:/var/lib/postgresql/data
+    networks:
+      - user-network
+
+  user-service:
+    build: ./userService
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://user-db:5432/user_service
+      SPRING_DATASOURCE_USERNAME: user_admin
+      SPRING_DATASOURCE_PASSWORD: user_db_pass
+      JWT_SECRET: "586E3272357538782F413F4428472B4B6250655368566B597033733676397924"
+    depends_on:
+      - user-db
+    networks:
+      - user-network
+      - main-network
+
+  # ======== RABBITMQ ========
+  rabbitmq:
+    image: rabbitmq:3-management
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: securepass123
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    networks:
+      - main-network
+
+volumes:
+  user-data:
+
+networks:
+  main-network:
+    driver: bridge
+  user-network:
+    driver: bridge
+
