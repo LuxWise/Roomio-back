@@ -1,10 +1,10 @@
 package com.ReservationService.controller;
 
-
 import com.ReservationService.model.Reservation;
 import com.ReservationService.service.ReservationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.MessagingException;
 import org.springframework.util.function.ThrowingSupplier;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,7 +47,7 @@ public class ReservationController {
         });
     }
 
-    @PatchMapping("cancel/{reservationId}")
+    @PatchMapping("/{reservationId}")
     public ResponseEntity<ReservationResponse> cancelReservation() {
         return handleRequestProcess(() -> {
             return ReservationResponse.builder()
@@ -59,6 +59,8 @@ public class ReservationController {
     private ResponseEntity<ReservationResponse> handleRequestProcess(ThrowingSupplier<ReservationResponse> supplier) {
         try {
             return ResponseEntity.ok(supplier.get());
+        } catch (MessagingException e) {
+            return ResponseEntity.status(500).body(ReservationResponse.builder().message("Error to send email").build());
         } catch (Exception e) {
             return ResponseEntity.status(500).body(ReservationResponse.builder().message("Internal Server Error").build());
         }

@@ -12,16 +12,20 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Controller
-@RequestMapping("/api/hotels")
+@RequestMapping("/hotels")
 @RequiredArgsConstructor
 public class HotelController {
 
     private final HotelService hotelService;
     private final RoomService roomService;
+
+    @GetMapping("/test")
+    public ResponseEntity<String> test() {
+        return ResponseEntity.ok("Test endpoint is working");
+    }
 
     @GetMapping()
     public ResponseEntity<Object[]> getAllHotels() {
@@ -57,14 +61,14 @@ public class HotelController {
     @PostMapping("/rooms")
     public ResponseEntity<HotelResponse> createRooms() {
         return  handleRequestProcess(() -> {
-            return HotelResponse.builder().message("Hotel created successfully").build();
+            return HotelResponse.builder().message("Room created successfully").build();
         });
     }
 
     @PatchMapping("/rooms/{hotelId}")
     public ResponseEntity<HotelResponse> modifyRooms() {
         return handleRequestProcess(() -> {
-            return HotelResponse.builder().message("Room created successfully").build();
+            return HotelResponse.builder().message("Room modify successfully").build();
         });
     }
 

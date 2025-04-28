@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
 
   # ======== API GATEWAY ========
@@ -16,7 +14,7 @@ services:
       - rabbitmq
       - user-service
 
-    # ========== USER SERVICE ==========
+  # ========== USER SERVICE ==========
   user-db:
     image: postgres:17
     environment:
@@ -41,6 +39,86 @@ services:
       - user-network
       - main-network
 
+    # ========== HOTEL SERVICE ==========
+  hotel-db:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: hotel_admin
+      POSTGRES_PASSWORD: hotel_db_pass
+      POSTGRES_DB: hotel_service
+    volumes:
+      - hotel-data:/var/lib/postgresql/data
+    networks:
+      - hotel-network
+
+  hotel-service:
+    build: ./HotelService
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://hotel-db:5432/hotel_service
+      SPRING_DATASOURCE_USERNAME: hotel_admin
+      SPRING_DATASOURCE_PASSWORD: hotel_db_pass
+    depends_on:
+      - hotel-db
+    networks:
+      - hotel-network
+      - main-network
+
+  # ========== RESERVATION SERVICE ==========
+  reservation-db:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: reservation_admin
+      POSTGRES_PASSWORD: reservation_db_pass
+      POSTGRES_DB: reservation_service
+    volumes:
+      - reservation-data:/var/lib/postgresql/data
+    networks:
+      - reservation-network
+
+  reservation-service:
+    build: ./ReservationService
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://reservation-db:5432/reservation_service
+      SPRING_DATASOURCE_USERNAME: reservation_admin
+      SPRING_DATASOURCE_PASSWORD: reservation_db_pass
+      RABBITMQ_URI: amqp://rabbitmq:5672
+    depends_on:
+      - reservation-db
+      - rabbitmq
+    networks:
+      - reservation-network
+      - main-network
+
+    # ========== NOTIFICATION SERVICE ==========
+  notification-db:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: notification_admin
+      POSTGRES_PASSWORD: notification_db_pass
+      POSTGRES_DB: notification_service
+    volumes:
+      - notification-data:/var/lib/postgresql/data
+    networks:
+      - notification-network
+
+  notification-service:
+    build: ./NotificationService
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://notification-db:5432/notification_service
+      SPRING_DATASOURCE_USERNAME: notification_admin
+      SPRING_DATASOURCE_PASSWORD: notification_db_pass
+      SPRING_MAIL_USERNAME: roomio.comunicaciones.2025@gmail.com
+      SPRING_MAIL_PASSWORD: miqg yttc qzhw jgmp
+      RABBITMQ_URI: amqp://rabbitmq:5672
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: securepass123
+    depends_on:
+      - notification-db
+      - rabbitmq
+    networks:
+      - notification-network
+      - main-network
+
   # ======== RABBITMQ ========
   rabbitmq:
     image: rabbitmq:3-management
@@ -55,10 +133,18 @@ services:
 
 volumes:
   user-data:
+  hotel-data:
+  reservation-data:
+  notification-data:
 
 networks:
   main-network:
     driver: bridge
   user-network:
     driver: bridge
-
+  hotel-network:
+    driver: bridge
+  reservation-network:
+    driver: bridge
+  notification-network:
+    driver: bridge
