@@ -12,11 +12,16 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/reservations")
+@RequestMapping("/reservation")
 @RequiredArgsConstructor
 public class ReservationController {
 
     private final ReservationService reservationService;
+
+    @GetMapping("/health")
+    public ResponseEntity<String> healthCheck() {
+        return ResponseEntity.ok("Reservation Service is up and running");
+    }
 
     @GetMapping
     public ResponseEntity<List<Reservation>> getAllReservations() {

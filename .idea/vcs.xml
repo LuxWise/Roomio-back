@@ -4,6 +4,8 @@
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/ApiGateway" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/HotelService" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/NotificationService" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ReservationService" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/userService" vcs="Git" />
   </component>
 </project>

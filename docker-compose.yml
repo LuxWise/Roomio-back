@@ -13,6 +13,9 @@ services:
     depends_on:
       - rabbitmq
       - user-service
+      - hotel-service
+      - reservation-service
+      - notification-service
 
   # ========== USER SERVICE ==========
   user-db:
@@ -130,6 +133,19 @@ services:
       - "5672:5672"
     networks:
       - main-network
+
+  # ======== VAULT ========
+  vault:
+    image: vault:1.13.0
+    environment:
+      VAULT_DEV_ROOT_TOKEN_ID: root_token
+      VAULT_DEV_LISTEN_ADDRESS: "0.0.0.0:8200"
+    ports:
+      - "8200:8200"
+    command: vault server -dev -dev-root-token-id=j3H8p2T5mQ9bF6vY4wZ1R0cG7S
+    volumes:
+      - ./vault:/vault
+
 
 volumes:
   user-data:

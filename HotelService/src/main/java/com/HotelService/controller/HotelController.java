@@ -22,9 +22,9 @@ public class HotelController {
     private final HotelService hotelService;
     private final RoomService roomService;
 
-    @GetMapping("/test")
+    @GetMapping("/health")
     public ResponseEntity<String> test() {
-        return ResponseEntity.ok("Test endpoint is working");
+        return ResponseEntity.ok("Hotel Service is up and running");
     }
 
     @GetMapping()
@@ -39,7 +39,7 @@ public class HotelController {
         return ResponseEntity.ok(hotel);
     }
 
-    @GetMapping("/rooms")
+        @GetMapping("/rooms")
     public ResponseEntity<Object[]> getAllRooms() {
         List<Room> rooms = roomService.getAllRooms();
         return ResponseEntity.ok(rooms.toArray());
