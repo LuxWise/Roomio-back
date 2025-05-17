@@ -23,8 +23,25 @@ public class HotelController {
     private final RoomService roomService;
 
     @GetMapping("/health")
-    public ResponseEntity<String> test() {
-        return ResponseEntity.ok("Hotel Service is up and running");
+    public ResponseEntity<String> checkHeaders(
+            @RequestHeader(value = "X-User-ID", required = false) String userId,
+            @RequestHeader(value = "X-User-Roles", required = false) String roles) {
+
+        if (userId == null) {
+            System.out.println("❌ Header X-User-ID no recibido");
+        } else {
+            System.out.println("✅ Header X-User-ID: " + userId);
+        }
+
+        if (roles == null) {
+            System.out.println("❌ Header X-User-ID no recibido");
+        } else {
+            System.out.println("✅ Header X-User-ID: " + userId);
+        }
+
+
+
+        return ResponseEntity.ok("UserID: " + userId + ", Roles: " + roles);
     }
 
     @GetMapping()
