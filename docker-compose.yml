@@ -80,6 +80,25 @@ services:
       - reservation-network
       - main-network
 
+#  # ======== PAYMENT SERVICE ============
+#  payment-service:
+#    build: ./PaymentServiceRoomio
+#    image: luxwise/roomio:payment-service
+#    environment:
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://roomio.postgres.database.azure.com:5432/payment_service
+#      SPRING_DATASOURCE_USERNAME: payment_admin
+#      SPRING_DATASOURCE_PASSWORD: payment_db_pass
+#      RABBITMQ_URI: amqp://rabbitmq:5672
+#      RABBITMQ_DEFAULT_USER: admin
+#      RABBITMQ_DEFAULT_PASS: adminpass123
+#    depends_on:
+#      - rabbitmq
+#      - reservation-service
+#      - notification-service
+#    networks:
+#      - payment-network
+#      - main-network
+
   # ======== RABBITMQ ========
   rabbitmq:
     image: rabbitmq:4-management
@@ -103,4 +122,6 @@ networks:
   reservation-network:
     driver: bridge
   notification-network:
+    driver: bridge
+  payment-network:
     driver: bridge

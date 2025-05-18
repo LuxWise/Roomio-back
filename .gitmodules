@@ -13,3 +13,6 @@
 [submodule "ApiGatewayRoomio"]
 	path = ApiGatewayRoomio
 	url = https://github.com/LuxWise/ApiGatewayRoomio.git
+[submodule "PaymentServiceRoomio"]
+	path = PaymentServiceRoomio
+	url = https://github.com/LuxWise/PaymentServiceRoomio.git
