@@ -1,0 +1,106 @@
+services:
+
+  # ======== API GATEWAY ========
+  api-gateway:
+    build: ./ApiGatewayRoomio
+    image: luxwise/roomio:api-gateway
+    ports:
+      - "8080:8080"
+    environment:
+      RABBITMQ_URI: amqp://rabbitmq:5672
+      JWT_SECRET: "586E3272357538782F413F4428472B4B6250655368566B597033733676397924"
+    networks:
+      - main-network
+    depends_on:
+      - rabbitmq
+      - user-service
+      - hotel-service
+      - reservation-service
+      - notification-service
+
+  # ========== USER SERVICE ==========
+  user-service:
+    build: ./UserServiceRoomio
+    image: luxwise/roomio:user-service
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://roomio.postgres.database.azure.com:5432/user_service
+      SPRING_DATASOURCE_USERNAME: user_admin
+      SPRING_DATASOURCE_PASSWORD: user_db_pass
+      JWT_SECRET: "586E3272357538782F413F4428472B4B6250655368566B597033733676397924"
+    networks:
+      - user-network
+      - main-network
+
+    # ========== HOTEL SERVICE ==========
+  hotel-service:
+    build: ./HotelServiceRoomio
+    image: luxwise/roomio:hotel-service
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://roomio.postgres.database.azure.com:5432/hotel_service
+      SPRING_DATASOURCE_USERNAME: hotel_admin
+      SPRING_DATASOURCE_PASSWORD: hotel_db_pass
+    networks:
+      - hotel-network
+      - main-network
+
+  # ========== NOTIFICATION SERVICE ==========
+  notification-service:
+    build: ./NotificationServiceRoomio
+    image: luxwise/roomio:notification-service
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://roomio.postgres.database.azure.com:5432/notification_service
+      SPRING_DATASOURCE_USERNAME: notification_admin
+      SPRING_DATASOURCE_PASSWORD: notification_db_pass
+      SPRING_MAIL_USERNAME: roomio.comunicaciones.2025@gmail.com
+      SPRING_MAIL_PASSWORD: gpsh bcxs wiyo sbts
+      RABBITMQ_URI: amqp://rabbitmq:5672
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: adminpass123
+    depends_on:
+      - rabbitmq
+    networks:
+      - notification-network
+      - main-network
+
+  # ========== RESERVATION SERVICE ==========
+  reservation-service:
+    build: ./ReservationServiceRoomio
+    image: luxwise/roomio:reservation-service
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://roomio.postgres.database.azure.com:5432/reservation_service
+      SPRING_DATASOURCE_USERNAME: reservation_admin
+      SPRING_DATASOURCE_PASSWORD: reservation_db_pass
+      RABBITMQ_URI: amqp://rabbitmq:5672
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: adminpass123
+    depends_on:
+      - rabbitmq
+      - notification-service
+    networks:
+      - reservation-network
+      - main-network
+
+  # ======== RABBITMQ ========
+  rabbitmq:
+    image: rabbitmq:4-management
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: adminpass123
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    networks:
+      - main-network
+
+
+networks:
+  main-network:
+    driver: bridge
+  user-network:
+    driver: bridge
+  hotel-network:
+    driver: bridge
+  reservation-network:
+    driver: bridge
+  notification-network:
+    driver: bridge

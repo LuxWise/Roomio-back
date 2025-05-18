@@ -1,0 +1,15 @@
+[submodule "HotelServiceRoomio"]
+	path = HotelServiceRoomio
+	url = https://github.com/LuxWise/HotelServiceRoomio.git
+[submodule "NotificationServiceRoomio"]
+	path = NotificationServiceRoomio
+	url = https://github.com/LuxWise/NotificationServiceRoomio.git
+[submodule "ReservationServiceRoomio"]
+	path = ReservationServiceRoomio
+	url = https://github.com/LuxWise/ReservationServiceRoomio.git
+[submodule "UserServiceRoomio"]
+	path = UserServiceRoomio
+	url = https://github.com/LuxWise/UserServiceRoomio.git
+[submodule "ApiGatewayRoomio"]
+	path = ApiGatewayRoomio
+	url = https://github.com/LuxWise/ApiGatewayRoomio.git
