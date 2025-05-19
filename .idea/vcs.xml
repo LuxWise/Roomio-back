@@ -5,6 +5,7 @@
     <mapping directory="$PROJECT_DIR$/ApiGatewayRoomio" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/HotelServiceRoomio" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/NotificationServiceRoomio" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/PaymentServiceRoomio" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/ReservationServiceRoomio" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/UserServiceRoomio" vcs="Git" />
   </component>

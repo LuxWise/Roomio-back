@@ -35,6 +35,8 @@ services:
   hotel-service:
     build: ./HotelServiceRoomio
     image: luxwise/roomio:hotel-service
+    ports:
+      - "8082:8082"
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://roomio.postgres.database.azure.com:5432/hotel_service
       SPRING_DATASOURCE_USERNAME: hotel_admin
